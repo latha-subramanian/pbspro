@@ -11,7 +11,7 @@ ${DOCKER_EXEC} ./autogen.sh
 ${DOCKER_EXEC} ./configure
 ${DOCKER_EXEC} make dist
 ${DOCKER_EXEC} /bin/bash -c 'mkdir -p /root/rpmbuild/SOURCES/; cp -fv pbspro-*.tar.gz /root/rpmbuild/SOURCES/'
-${DOCKER_EXEC} /bin/bash -c 'CFLAGS="-g -O2 -Wall -Werror" rpmbuild -bb --nodeps pbspro.spec'
+${DOCKER_EXEC} /bin/bash -c 'CFLAGS="-g -coverage -O2 -Wall -Werror" rpmbuild -bb --nodeps pbspro.spec'
 ${DOCKER_EXEC} /bin/bash -c 'alien --to-deb --scripts /root/rpmbuild/RPMS/x86_64/pbspro-server-??.*.x86_64.rpm'
 ${DOCKER_EXEC} /bin/bash -c 'dpkg -i pbspro-server_*_amd64.deb'
 ${DOCKER_EXEC} /bin/bash -c 'sed -i "s@PBS_START_MOM=0@PBS_START_MOM=1@" /etc/pbs.conf'

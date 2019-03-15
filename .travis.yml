@@ -14,6 +14,7 @@ env:
     - OS_TYPE=ubuntu:18.04
     - OS_TYPE=debian:9
     - OS_TYPE=centos:7 BUILD_MODE=_sanitize
+    - CODECOV_TOKEN="794dc8a0-ceb1-45cc-b835-ad78b2602aa4"
 before_install:
     - .github/runchecks
     - export OS_TYPE_FILE=${OS_TYPE////_}
@@ -29,4 +30,7 @@ install:
     - docker exec -it -w $(pwd)/test/fw testdev pip install -r requirements.txt .
     - docker exec -it testdev pbs_config --make-ug
     - docker exec -it -w $(pwd)/test/tests testdev pbs_benchpress --tags=smoke
+    - bash <(curl -s https://codecov.io/bash)
 script: true
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
