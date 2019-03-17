@@ -29,8 +29,6 @@ install:
     - ./.travis/${OS_TYPE_FILE}.sh
     - docker exec -it -w $(pwd)/test/fw testdev pip install -r requirements.txt .
     - docker exec -it testdev pbs_config --make-ug
-    - docker exec -it -w $(pwd)/test/tests testdev pbs_benchpress --tags=smoke
+    - docker exec -it -w $(pwd)/test/tests testdev pbs_benchpress --lcov-bin=/usr/bin/gcov --lcov-data=/root/rpmbuild/BUILD/pbspro-19.0.0/ --lcov-out=/root/pbspro/test/tests/pbs_code_cov  --tags=smoke
     - bash <(curl -s https://codecov.io/bash)
 script: true
-after_success:
-  - bash <(curl -s https://codecov.io/bash)

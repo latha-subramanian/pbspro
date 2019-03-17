@@ -73,10 +73,10 @@ class LcovUtils(object):
                  data_dir=None, html_nosrc=False, html_baseurl=None):
         self.set_coverage_data_dir(data_dir)
         self.set_coverage_bin(cov_bin)
-        self.set_genhtml_bin(html_bin)
+        # self.set_genhtml_bin(html_bin)
         self.set_coverage_out(cov_out)
-        self.set_html_nosource(html_nosrc)
-        self.set_html_baseurl(html_baseurl)
+        # self.set_html_nosource(html_nosrc)
+        # self.set_html_baseurl(html_baseurl)
         self.coverage_traces = []
 
     def set_html_baseurl(self, baseurl):
