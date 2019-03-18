@@ -14,7 +14,6 @@ env:
     - OS_TYPE=ubuntu:18.04
     - OS_TYPE=debian:9
     - OS_TYPE=centos:7 BUILD_MODE=_sanitize
-    - CODECOV_TOKEN="794dc8a0-ceb1-45cc-b835-ad78b2602aa4"
 before_install:
     - .github/runchecks
     - export OS_TYPE_FILE=${OS_TYPE////_}
@@ -22,13 +21,19 @@ before_install:
     - export OS_TYPE_FILE=${OS_TYPE_FILE//:/_}${BUILD_MODE}
     - docker pull ${OS_TYPE}
     - '[ "${OS_TYPE}" == "ubuntu:18.04" -o "${OS_TYPE}" == "debian:9" ] && export DOCKER_EXTRA_ARG="-e DEBIAN_FRONTEND=noninteractive" || true'
+    - ci_env=`bash <(curl -s https://codecov.io/env)`
     - docker run -it -d -h testdev.pbspro.org --name testdev -v $(pwd):$(pwd) --privileged -w $(pwd) ${DOCKER_EXTRA_ARG} ${OS_TYPE} /bin/bash
     - docker ps -a
     - export DOCKER_EXEC="docker exec -it ${DOCKER_EXTRA_ARG} --privileged testdev"
+    - export GCOV_PREFIX='/tmp/coverage'
+    - export GCOV_PREFIX_STRIP=10
+    - export CODECOV_TOKEN="794dc8a0-ceb1-45cc-b835-ad78b2602aa4"
 install:
     - ./.travis/${OS_TYPE_FILE}.sh
     - docker exec -it -w $(pwd)/test/fw testdev pip install -r requirements.txt .
     - docker exec -it testdev pbs_config --make-ug
-    - docker exec -it -w $(pwd)/test/tests testdev pbs_benchpress --lcov-bin=/usr/bin/gcov --lcov-data=/root/rpmbuild/BUILD/pbspro-19.0.0/ --lcov-out=/root/pbspro/test/tests/pbs_code_cov  --tags=smoke
-    - bash <(curl -s https://codecov.io/bash)
+    - docker exec -it -w $(pwd)/test/tests testdev pbs_benchpress -t SmokeTest.test_submit_job_array --lcov-bin=/usr/bin/gcov --lcov-data=/root/rpmbuild/BUILD/pbspro-19.0.0/ --lcov-out=/tmp/coverage_out
+    - docker exec -it -w /tmp/coverage_out testdev gcov . *
+    - docker exec -it -w /tmp/coverage_out testdev bash <(curl -s https://codecov.io/env) 
+    - docker exec -it -w /tmp/coverage_out testdev /bin/bash <(curl -s https://codecov.io/bash)
 script: true

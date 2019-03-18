@@ -823,11 +823,11 @@ class PTLTestRunner(Plugin):
             # reliable coverage data
             PBSInitServices().restart()
             self.lcov_utils.capture_coverage(name='PTLTestCov')
-            exclude = ['"*work/gSOAP/*"', '"*/pbs/doc/*"', 'lex.yy.c',
-                       'pbs_ifl_wrap.c', 'usr/include/*', 'unsupported/*']
-            self.lcov_utils.merge_coverage_traces(name='PTLTestCov',
-                                                  exclude=exclude)
-            self.lcov_utils.generate_html()
-            self.lcov_utils.change_baseurl()
-            self.logger.info('\n'.join(self.lcov_utils.summarize_coverage()))
+            # exclude = ['"*work/gSOAP/*"', '"*/pbs/doc/*"', 'lex.yy.c',
+            #            'pbs_ifl_wrap.c', 'usr/include/*', 'unsupported/*']
+            # self.lcov_utils.merge_coverage_traces(name='PTLTestCov',
+            #                                      exclude=exclude)
+            # self.lcov_utils.generate_html()
+            # self.lcov_utils.change_baseurl()
+            # self.logger.info('\n'.join(self.lcov_utils.summarize_coverage()))
         self._cleanup()

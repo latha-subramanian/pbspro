@@ -13,3 +13,5 @@ ${DOCKER_EXEC} /bin/bash -c 'yum -y install /root/rpmbuild/RPMS/x86_64/pbspro-se
 ${DOCKER_EXEC} /bin/bash -c 'sed -i "s@PBS_START_MOM=0@PBS_START_MOM=1@" /etc/pbs.conf'
 ${DOCKER_EXEC} /etc/init.d/pbs start
 ${DOCKER_EXEC} yum -y install python-pip sudo which net-tools man-db time.x86_64
+${DOCKER_EXEC} mkdir /tmp/coverage_out
+${DOCKER_EXEC} find /root/rpmbuild/BUILD/pbspro-19.0.0 -name '*.gcno' -exec cp {} /tmp/coverage_out \;
